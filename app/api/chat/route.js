@@ -24,17 +24,15 @@ export async function POST(req){
   try{
     
     const data = await req.json() // Parse the JSON body of the incoming request
-    // console.log(data);
-    
-    let chat_res = await chat.sendMessage(data[1]["content"]);
-    console.log(chat_res.response.text());
+    console.log(data)
+    // These next 4 lines work
+    // let chat_res = await chat.sendMessage("I have 2 dogs in my house.");
+    // console.log(chat_res.response.text());
+    // chat_res = await chat.sendMessage("How many paws are in my house?");
+    // console.log(chat_res.response.text());
 
-    // const result = await model.generateContent(data[1]["content"]);
-
-    // console.log(data[1]["content"]);
-
-    // const response = await result.response;
-    // const output = response.text()
+    const prompt = data[1]["content"];
+    let chat_res = await chat.sendMessage(prompt);
 
 
     return new NextResponse(chat_res.response.text())
