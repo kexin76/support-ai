@@ -15,13 +15,13 @@ export default function Home() {
 
   const sendMessage = async () => {
     if (!message.trim() || isLoading) return;
-    setIsLoading(true)
+    setIsLoading(true);
     
-    setMessage('')
+    setMessage('');
     setMessages((messages) => [
       ...messages,
       { role: 'user', content: message },
-    ])
+    ]);
   
     try {
       const response = await fetch('/api/chat/', {
@@ -30,29 +30,28 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify([...messages, { role: 'user', content: message }]),
-      })
+      });
   
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error('Network response was not ok');
       }
-
-      const text = response.text();
+  
+      const text = await response.text();
       console.log(text);
-      setMessages((messages) =>[
-        ...messages, {role: "assistant", content:text}
-      ])
-
-
+      setMessages((messages) => [
+        ...messages, { role: "assistant", content: text }
+      ]);
+  
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
       setMessages((messages) => [
         ...messages,
         { role: 'assistant', content: "I'm sorry, but I encountered an error. Please try again later." },
-      ])
+      ]);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   }
-
+  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {

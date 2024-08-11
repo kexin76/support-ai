@@ -1,7 +1,6 @@
-import {NextResponse} from 'next/server' // Import NextResponse from Next.js for handling responses
+import {NextResponse} from 'next/server' 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// // System prompt for the AI, providing guidelines on how to respond to users
 const systemPrompt = "Answer to user response"
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -20,25 +19,18 @@ const chat = model.startChat({
   ],
 });
 
-export async function POST(req){
-  try{
+export async function POST(req) {
+  try {
+    const data = await req.json();
+    console.log(data);
     
-    const data = await req.json() // Parse the JSON body of the incoming request
-    console.log(data)
-    // These next 4 lines work
-    // let chat_res = await chat.sendMessage("I have 2 dogs in my house.");
-    // console.log(chat_res.response.text());
-    // chat_res = await chat.sendMessage("How many paws are in my house?");
-    // console.log(chat_res.response.text());
+    const prompt = data[data.length - 1].content; // get the latest user message
+    const chat_res = await chat.sendMessage(prompt);
 
-    const prompt = data[1]["content"];
-    let chat_res = await chat.sendMessage(prompt);
+    return new NextResponse(chat_res.response.text());
 
-
-    return new NextResponse(chat_res.response.text())
-
-  } catch (error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
+    return new NextResponse('Error processing request', { status: 500 });
   }
 }
-
