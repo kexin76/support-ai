@@ -125,6 +125,8 @@ const scrollToBottom = () => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={isLoading}
+            sx ={{bgcolor: "#FFFFFF"}}
+            variant="filled"
           />
           <Button 
             variant="contained" 
